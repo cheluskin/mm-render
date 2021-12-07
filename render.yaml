@@ -1,11 +1,13 @@
 databases:
 - name: mattermost
   plan: starter
+  region: frankfurt
 
 services:
 - type: pserv
   name: mattermost-minio
   env: docker
+  region: frankfurt
   dockerfilePath: ./minio/Dockerfile
   dockerContext: ./minio
   disk:
@@ -20,6 +22,7 @@ services:
 - type: web
   name: mattermost
   env: docker
+  region: frankfurt
   plan: starter
   dockerfilePath: ./app/Dockerfile
   dockerContext: ./app
