@@ -3,6 +3,7 @@ databases:
   plan: starter
   region: frankfurt
 
+services:
 - type: web
   name: mattermost
   env: docker
