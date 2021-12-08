@@ -32,6 +32,8 @@ if [ "$1" = 'mattermost' ]; then
     # Copy default configuration file
     cp /config.json.save $MM_CONFIG
     # Substitue some parameters with jq
+
+    jq '.ServiceSettings.SiteURL = "https://most.mosgrup.art"' $MM_CONFIG >$MM_CONFIG.tmp && mv $MM_CONFIG.tmp $MM_CONFIG
     jq '.ServiceSettings.ListenAddress = ":8000"' $MM_CONFIG >$MM_CONFIG.tmp && mv $MM_CONFIG.tmp $MM_CONFIG
     jq '.LogSettings.EnableConsole = true' $MM_CONFIG >$MM_CONFIG.tmp && mv $MM_CONFIG.tmp $MM_CONFIG
     jq '.LogSettings.ConsoleLevel = "ERROR"' $MM_CONFIG >$MM_CONFIG.tmp && mv $MM_CONFIG.tmp $MM_CONFIG
@@ -61,17 +63,6 @@ if [ "$1" = 'mattermost' ]; then
     echo OK
   else
     echo "Using existing database connection"
-  fi
-
-  if [[ "$MM_FILESETTINGS_DRIVERNAME" == amazons3 ]]; then
-    echo 'Configuring minio'
-    mc config host add minio \
-      "http://${MM_FILESETTINGS_AMAZONS3ENDPOINT}" \
-      "${MM_FILESETTINGS_AMAZONS3ACCESSKEYID}" \
-      "${MM_FILESETTINGS_AMAZONS3SECRETACCESSKEY}"
-
-    echo "Creating minio bucket ${MM_FILESETTINGS_AMAZONS3BUCKET}"
-    mc mb -p "minio/${MM_FILESETTINGS_AMAZONS3BUCKET}"
   fi
 
   export MM_ELASTICSEARCHSETTINGS_CONNECTIONURL="http://${MM_ELASTICSEARCHSETTINGS_HOSTPORT}"
